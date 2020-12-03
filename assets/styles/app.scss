@@ -1,0 +1,10 @@
+$primary: lightgray;
+$secondary: #48536E;
+$success: #FFD200;
+$warning: #00C094;
+
+@import "~bootstrap/scss/bootstrap";
+
+body {
+    background-color: $primary;
+}
