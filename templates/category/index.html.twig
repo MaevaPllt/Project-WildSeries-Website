@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Toutes les catégories{% endblock %}
+
+{% block body %}
+    <h1>Chercher une série par catégorie:</h1>
+    {% for category in categories %}
+        <div>
+            <h2>{{ loop.index }} / {{ category.name }}</h2>
+            <a href="{{ path("category_show", { categoryName: category.name }) }}" class="btn btn-success btn-sm" type="button">
+                Voir la fiche
+            </a>
+        </div>
+    {% else %}
+        Aucune série trouvée.
+    {% endfor %}
+
+    <a href="{{ path('app_index') }}" class="btn btn-success btn-sm" type="button">
+        Retour à l'accueil
+    </a>
+{% endblock %}
