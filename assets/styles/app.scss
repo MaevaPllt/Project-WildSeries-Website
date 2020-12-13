@@ -6,4 +6,9 @@ $success: #FBCF00;
 
 body {
     background-color: $primary;
+    & a {
+        color: $secondary;
+    }
 }
+
+
