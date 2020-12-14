@@ -14,6 +14,12 @@
                     Saison {{ season.number }}
                 </a></p>
             {% endfor %}
+            <p>Acteurs associés :</p>
+            {% for actor in actors %}
+                <a href="{{ path("actor_show", { id: actor.id }) }}" class="btn btn-success btn-sm" type="button">
+                    {{ actor.name }}
+                </a>
+            {% endfor %}
         </div>
     </div>
     <a href="{{ path('program_index') }}" class="btn btn-success " type="button">

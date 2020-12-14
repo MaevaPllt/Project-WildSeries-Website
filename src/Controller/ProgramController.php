@@ -61,10 +61,7 @@ Class ProgramController extends AbstractController
      */
     public function show(Program $program): Response
     {
-        $program = $this->getDoctrine()
-            ->getRepository(Program::class)
-            ->findOneBy(['id' => $program]);
-
+        $actors = $program->getActors();
         $seasons = $this->getDoctrine()
             ->getRepository(Season::class)
             ->findBy(['program' => $program]);
@@ -75,7 +72,11 @@ Class ProgramController extends AbstractController
                 'No program with id : ' . $program . ' found in program\'s table.'
             );
         }
-        return $this->render('program/show.html.twig', ['program' => $program, 'seasons' => $seasons]);
+        return $this->render('program/show.html.twig', [
+            'program' => $program,
+            'seasons' => $seasons,
+            'actors' => $actors,
+        ]);
 
     }
 
