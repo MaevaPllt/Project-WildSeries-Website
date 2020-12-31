@@ -5,7 +5,7 @@
     {% for program in programs %}
         <div>
             <h2>{{ program.title }}</h2>
-            <a href="{{ path("program_show", { id: program.id }) }}" class="btn btn-success btn-sm" type="button">
+            <a href="{{ path("program_show", { slug: program.slug }) }}" class="btn btn-success btn-sm" type="button">
                 Voir la fiche de la série
             </a>
         </div>

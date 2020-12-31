@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Episode;
 use App\Entity\Program;
 use App\Entity\Season;
+use App\Service\Slugify;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,15 +37,21 @@ Class ProgramController extends AbstractController
     /**
      * @Route("/new", name="new")
      * @param Request $request
+     * @param Slugify $slugify
      * @return Response
      */
-    public function new(Request $request) : Response
+    public function new(Request $request, Slugify $slugify): Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()){
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            $slug = $slugify->generate($program->getTitle());
+            $program->setSlug($slug);
+
             $entityManager->persist($program);
             $entityManager->flush();
             return $this->redirectToRoute('program_index');
@@ -55,7 +62,7 @@ Class ProgramController extends AbstractController
     }
 
     /**
-     * @Route("/{id<^[0-9]+$>}", methods={"GET"}, name="show")
+     * @Route("/{slug}", methods={"GET"}, name="show")
      * @param Program $program
      * @return Response
      */
@@ -81,16 +88,14 @@ Class ProgramController extends AbstractController
     }
 
     /**
-     * @Route("/{programId}/season/{seasonId}", name="season_show")
-     * @param Program $programId
+     * @Route("/{program_slug}/season/{seasonId}", name="season_show")
+     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program_slug": "slug"}})
+     * @param Program $program
      * @param Season $seasonId
      * @return Response
      */
-    public function showSeason(Program $programId, Season $seasonId): Response
+    public function showSeason(Program $program, Season $seasonId): Response
     {
-        $program = $this->getDoctrine()
-            ->getRepository(Program::class)
-            ->findOneBy(['id' => $programId]);
         $season = $this->getDoctrine()
             ->getRepository(Season::class)
             ->findOneBy(['id' => $seasonId]);
@@ -106,18 +111,20 @@ Class ProgramController extends AbstractController
 
 
     /**
-     * @Route("/{programId}/seasons/{seasonId}/episodes/{episodeId}", name="episode_show")
-     * @param Program $programId
-     * @param Season $seasonId
-     * @param Episode $episodeId
+     * @Route("/{program_slug}/seasons/{seasonId}/episodes/{episode_slug}", name="episode_show")
+     * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episode_slug": "slug"}})
+     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program_slug": "slug"}})
+     * @param Program $program
+     * @param Season $season
+     * @param Episode $episode
      * @return Response
      */
-    public function showEpisode(Program $programId, Season $seasonId, Episode $episodeId): Response
+    public function showEpisode(Program $program, Season $season, Episode $episode): Response
     {
         return $this->render('program/episode_show.html.twig', [
-            'program' => $programId,
-            'season'=> $seasonId,
-            'episode'=> $episodeId,
+            'program' => $program,
+            'season' => $season,
+            'episode' => $episode,
 
         ]);
     }

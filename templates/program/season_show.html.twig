@@ -8,7 +8,7 @@
 
     <ul>
     {% for episode in episodes %}
-    <h2><a href="{{ path('program_episode_show', {programId: program.id, seasonId: season.id, episodeId: episode.id}) }}">
+    <h2><a href="{{ path('program_episode_show', {program_slug: program.slug, seasonId: season.id, episode_slug: episode.slug}) }}">
            {{ episode.number}}{{ episode.title }}
         </a>
     </h2>
