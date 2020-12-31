@@ -6,3 +6,4 @@ https://www.loom.com/share/5f7cf751fe5a4f5786b3314a7b66d920 (link quest 14 Doctr
 https://www.loom.com/share/29e0cc64627f43fb861548d844f41894 (link quest 15 EntityType)
 https://www.loom.com/share/3a271362b00446228cf9a6954d1e831b (link quest 16 Data Fixtures)
 https://www.loom.com/share/1ed3abb0151f4994baac101ce5f9eace (link quest 17 Slug)
+https://www.loom.com/share/8d5449a9a25947378ade72e1320de6fa (link quest 18 Mailtrap)
