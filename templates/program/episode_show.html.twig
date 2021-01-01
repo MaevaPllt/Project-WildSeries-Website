@@ -8,4 +8,12 @@
     <p>{{ episode.number }} : {{ episode.title }}</p>
     <p>{{ episode.synopsis }}</p>
 
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <h1>Ajouter un commentaire</h1>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">{{ button_label|default('Comment') }}</button>
+        {{ form_end(form) }}
+    {% endif %}
+
 {% endblock %}
