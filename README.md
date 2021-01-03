@@ -7,4 +7,4 @@ https://www.loom.com/share/29e0cc64627f43fb861548d844f41894 (link quest 15 Entit
 https://www.loom.com/share/3a271362b00446228cf9a6954d1e831b (link quest 16 Data Fixtures)
 https://www.loom.com/share/1ed3abb0151f4994baac101ce5f9eace (link quest 17 Slug)
 https://www.loom.com/share/8d5449a9a25947378ade72e1320de6fa (link quest 18 Mailtrap)
-https://www.loom.com/share/017bd1a59dd14c868ebb0cb67660347c (link quest 19 Gestion admin)
+https://www.loom.com/share/aec576d6117c45fdb8ee62c36a4e2efe (link quest 19 Gestion admin)
