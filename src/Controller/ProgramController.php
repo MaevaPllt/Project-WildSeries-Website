@@ -7,6 +7,7 @@ use App\Entity\Episode;
 use App\Entity\Program;
 use App\Entity\Season;
 use App\Form\CommentType;
+use App\Form\SeasonType;
 use App\Service\Slugify;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use App\Form\ProgramType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 /**
@@ -59,6 +61,8 @@ Class ProgramController extends AbstractController
 
             $slug = $slugify->generate($program->getTitle());
             $program->setSlug($slug);
+
+            $program->setOwner($this->getUser());
 
             $entityManager->persist($program);
             $entityManager->flush();
@@ -159,5 +163,50 @@ Class ProgramController extends AbstractController
             'form' => $form->createView()
 
         ]);
+    }
+
+    /**
+     * @Route("/{slug}/edit", name="edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Program $program
+     * @return Response
+     */
+    public function edit(Request $request, Program $program): Response
+    {
+        if (!($this->getUser() == $program->getOwner())) {
+            // If not the owner, throws a 403 Access Denied exception
+            throw new AccessDeniedException('Only the owner can edit the program!');
+        }
+
+        $form = $this->createForm(SeasonType::class, $program);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('program_index');
+        }
+
+        return $this->render('program/edit.html.twig', [
+            'program' => $program,
+            'form' => $form->createView(),
+        ]);
+    }
+    /**
+     * @Route("/comment/{id}/delete", name="delete_comment", methods={"DELETE"})
+     * @param Request $request
+     * @param Comment $comment
+     * @return Response
+     */
+    public function deleteComment(Request $request, Comment $comment): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($comment);
+            $entityManager->flush();
+            $this->addFlash('danger', 'The comment has been removed');
+
+        }
+        return $this->redirectToRoute('program_index');
     }
 }

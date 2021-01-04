@@ -8,7 +8,22 @@
     <p>{{ episode.number }} : {{ episode.title }}</p>
     <p>{{ episode.synopsis }}</p>
 
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    {% for comment in episode.comments %}
+        <div class="container-fluid">
+            <div class="card">
+                <p>author: {{ comment.author.email }}</p>
+                <p>comment: {{ comment.comment }}</p>
+                <p>rate: {{ comment.rate }}</p>
+            {% if app.user %}
+                {% if is_granted("ROLE_ADMIN") or app.user.email == comment.author.email %}
+                    {{ include('program/_delete_comment.html.twig') }}
+                {% endif %}
+            {% endif %}
+            </div>
+        </div>
+  {% endfor %}
+
+    {% if app.user %}
         <h1>Ajouter un commentaire</h1>
         {{ form_start(form) }}
         {{ form_widget(form) }}
